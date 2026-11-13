@@ -18,6 +18,14 @@
 <nav class="alt-menu" id="altMenu" hidden></nav>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
+<script>
+  // Dosyaya çift tıklanınca (file://) modüller yüklenmez; doğru adresi göster.
+  if (location.protocol === 'file:') {
+    var u = 'https://mustafa217045-crypto.github.io/takimci-siparis/';
+    document.getElementById('app').innerHTML = '<div class="card" style="margin-top:20px"><h3>Bu dosya doğrudan açılmaz</h3>' +
+      '<p>Uygulama internet adresinden açılır:</p><p><a href="' + u + '">' + u + '</a></p></div>';
+  }
+</script>
 <script type="module">
   import { baslat } from './js/baslat.js';
   const p = new URLSearchParams(location.search);
