@@ -1,46 +1,5 @@
-<!doctype html>
-<html lang="tr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<title>Sipariş</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="stylesheet" href="css/stil.css">
-</head>
-<body>
-<header><h1><span id="baslik">Sipariş</span><span id="ustSag"></span></h1><div class="alt" id="altBaslik"></div></header>
-<main id="app"><div class="empty">Yükleniyor…</div></main>
-<nav class="alt-menu" id="altMenu" hidden></nav>
-<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
-<div class="toast" id="toast"></div>
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Taşındı</title>
 <script>
-  // Dosyaya çift tıklanınca (file://) modüller yüklenmez; doğru adresi göster.
-  if (location.protocol === 'file:') {
-    var u = 'https://mustafa217045-crypto.github.io/takimci-siparis/';
-    document.getElementById('app').innerHTML = '<div class="card" style="margin-top:20px"><h3>Bu dosya doğrudan açılmaz</h3>' +
-      '<p>Uygulama internet adresinden açılır:</p><p><a href="' + u + '">' + u + '</a></p></div>';
-  }
-</script>
-<script type="module">
-  import { baslat } from './js/baslat.js';
-  const p = new URLSearchParams(location.search);
-  let kod = p.get('f');
-  // Ana ekrana eklenen uygulama manifestteki adresle (kodsuz) açılır:
-  // müşteri cihazında son kullanılan kodu hatırlayıp onunla aç.
-  try {
-    if (kod) localStorage.setItem('musteriKod', kod);
-    else if (!localStorage.getItem('yoneticiCihaz') && localStorage.getItem('musteriKod') && !p.has('yonetici')) kod = localStorage.getItem('musteriKod');
-  } catch {}
-  const { veri, auth, fa } = baslat({ emulator: p.has('emu') });
-  document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') e.currentTarget.classList.remove('open'); });
-  if (kod) (await import('./js/musteri.js')).musteriBaslat(veri, kod);
-  else (await import('./js/yonetici.js')).yoneticiBaslat(veri, auth, fa);
-  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
-</script>
-</body>
-</html>
+navigator.serviceWorker && navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})});
+location.replace('https://nanaloy-turkiye.web.app/' + location.search);
+</script></head><body><p>Adres değişti: <a href="https://nanaloy-turkiye.web.app/">nanaloy-turkiye.web.app</a></p></body></html>
