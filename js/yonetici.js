@@ -181,7 +181,7 @@ function kart(s) {
   if (['teslim_edildi', 'iptal'].includes(s.durum)) butonlar.push('<button class="btn ghost kucuk" data-sil>Sil</button>');
   if (s.durum === 'teslim_edildi') butonlar.push('<button class="btn ghost kucuk" data-geri>Geri al</button>');
   const hzSay = [...hz].filter(i => h[i]).length;
-  return `<div class="card" id="y_${s.id}">
+  return `<div class="card" id="y_${esc(s.id)}">
     <div class="row"><b>${esc(s.firma_ad)}</b>${durumEtiketi(s.durum, DURUM_ADI[s.durum])}</div>
     <div class="row" style="margin-top:4px"><span class="muted">${tarihSaat(s.olusturma)}${s.kaynak === 'yonetici' ? ' · WhatsApp' : ''}</span>${kimde}</div>
     ${s.durum === 'teklif_gonderildi' ? '<div class="muted" style="margin-top:6px">Müşterinin kararı bekleniyor.</div>' : ''}
@@ -260,7 +260,7 @@ async function teklifGonder(s) {
 function elleSiparisAc() {
   if (!firmalar.length) return toast('Önce Firmalar bölümünden firma ekleyin');
   const s = modalAc(`<h3>WhatsApp'tan gelen sipariş</h3>
-    <label class="l">Firma</label><select id="eFirma">${firmalar.map(f => `<option value="${f.id}">${esc(f.ad)}</option>`).join('')}</select>
+    <label class="l">Firma</label><select id="eFirma">${firmalar.map(f => `<option value="${esc(f.id)}">${esc(f.ad)}</option>`).join('')}</select>
     <label class="l">Mesajı yapıştırın (her satır bir kalem)</label><textarea id="eMetin" rows="7"></textarea>
     <div id="eOnizleme"></div>
     <label class="l">Not</label><input id="eNot">
@@ -288,7 +288,7 @@ function elleSiparisAc() {
 function firmalarCiz() {
   const acik = fid => siparisler.filter(s => s.fid === fid && !['teslim_edildi', 'iptal'].includes(s.durum)).length;
   $('app').innerHTML = `<button class="btn block" id="firmaEkle">+ Firma ekle</button><div style="height:12px"></div>` +
-    (firmalar.length ? `<div class="card">${firmalar.map(f => `<div class="urun" data-id="${f.id}"><div><b>${esc(f.ad)}</b><div class="muted">${esc([f.yetkili, f.telefon].filter(Boolean).join(' · ') || 'İletişim bilgisi yok')}</div></div>
+    (firmalar.length ? `<div class="card">${firmalar.map(f => `<div class="urun" data-id="${esc(f.id)}"><div><b>${esc(f.ad)}</b><div class="muted">${esc([f.yetkili, f.telefon].filter(Boolean).join(' · ') || 'İletişim bilgisi yok')}</div></div>
       <div style="text-align:right">${f.link_aktif === false ? '<span class="tag d-iptal">Link kapalı</span>' : '<span class="tag d-onaylandi">Link açık</span>'}${acik(f.id) ? `<div class="muted">${acik(f.id)} açık sipariş</div>` : ''}</div></div>`).join('')}</div>`
       : '<div class="empty">Henüz firma yok. Firma ekleyince ona özel sipariş linki oluşur.</div>');
   $('firmaEkle').onclick = () => firmaFormu();
@@ -352,7 +352,7 @@ function katalogCiz() {
   $('app').innerHTML = `<button class="btn block" id="urunEkle">+ Ürün ekle</button>
     <input id="kAra" type="search" placeholder="Katalogda ara…" value="${esc(katalogSorgu)}" style="margin:12px 0">
     <p class="muted">Müşteri sipariş verirken bu listeden seçebilir. Fiyat burada görünmez; fiyat teklif ile verilir.</p>
-    ${tumu.length ? `<div class="card">${tumu.map(u => `<div class="urun" data-id="${u.id}"><div><div>${esc(u.ad)}</div><div class="muted">${esc([u.kategori, u.birim].filter(Boolean).join(' · '))}</div></div>${u._aktif === false ? '<span class="tag">Pasif</span>' : ''}</div>`).join('')}</div>`
+    ${tumu.length ? `<div class="card">${tumu.map(u => `<div class="urun" data-id="${esc(u.id)}"><div><div>${esc(u.ad)}</div><div class="muted">${esc([u.kategori, u.birim].filter(Boolean).join(' · '))}</div></div>${u._aktif === false ? '<span class="tag">Pasif</span>' : ''}</div>`).join('')}</div>`
       : `<div class="empty">${katalog.length ? 'Bulunamadı.' : 'Katalog boş. Sık istenen ürünleri ekleyin.'}</div>`}`;
   $('urunEkle').onclick = () => urunFormu();
   $('kAra').oninput = e => { katalogSorgu = e.target.value; const p = e.target.selectionStart; katalogCiz(); const a = $('kAra'); a.focus(); a.setSelectionRange(p, p); };
@@ -403,7 +403,7 @@ function ayarlarAc() {
   const kapatK = V.yoneticileriDinle(l => {
     const kutu = $('kullanicilar'); if (!kutu) return kapatK();
     kutu.innerHTML = l.map(y => `<div class="urun" style="cursor:default"><div><div>${esc(y.ad || '—')}${y.id === BEN.uid ? ' <span class="tag">Siz</span>' : ''}</div><div class="muted">${esc(y.eposta || '')}</div></div>
-      ${y.id === BEN.uid ? '' : `<button class="btn danger kucuk" data-ksil="${y.id}">Çıkar</button>`}</div>`).join('');
+      ${y.id === BEN.uid ? '' : `<button class="btn danger kucuk" data-ksil="${esc(y.id)}">Çıkar</button>`}</div>`).join('');
     kutu.querySelectorAll('[data-ksil]').forEach(b => b.onclick = async () => {
       const y = l.find(x => x.id === b.dataset.ksil);
       if (!(await onayla(`${y.ad} artık sisteme giremesin mi?`, { evet: 'Çıkar', tehlikeli: true }))) return ayarlarAc();

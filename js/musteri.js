@@ -141,7 +141,7 @@ async function katalogAc() {
   try { if (!katalog) katalog = await V.katalogGetir(); } catch (e) { return toast(hataMesaji(e), 'hata'); }
   const listele = () => {
     const l = katalogAra(katalog, $('kAra').value);
-    $('kListe').innerHTML = l.length ? l.map(u => `<div class="urun" data-id="${u.id}"><div><div>${esc(u.ad)}</div>${u.kategori ? `<div class="muted">${esc(u.kategori)}</div>` : ''}</div><span class="muted">${esc(u.birim)}</span></div>`).join('')
+    $('kListe').innerHTML = l.length ? l.map(u => `<div class="urun" data-id="${esc(u.id)}"><div><div>${esc(u.ad)}</div>${u.kategori ? `<div class="muted">${esc(u.kategori)}</div>` : ''}</div><span class="muted">${esc(u.birim)}</span></div>`).join('')
       : `<div class="empty">${katalog.length ? 'Bulunamadı. Katalogda yoksa satıra kendiniz yazabilirsiniz.' : 'Katalog henüz boş. Satırlara kendiniz yazabilirsiniz.'}</div>`;
     $('kListe').querySelectorAll('.urun').forEach(d => d.onclick = () => miktarSor(katalog.find(u => u.id === d.dataset.id)));
   };
@@ -217,7 +217,7 @@ function siparisKarti(s) {
     if (hazirlikVar && hazir.has(i)) sag = h[i] ? '<span title="Hazırlandı">✅</span>' : '<span class="muted">⏳</span>';
     return `<div class="kalem ${cikti ? 'cikti' : ''}"><div class="m"><span class="mt">${esc(k.metin)}</span>
       ${teklifIdx.has(i) ? (t ? `<div class="money" style="margin-top:3px">${TL(t.fiyat)}${t.not ? ` <span class="muted">· ${esc(t.not)}</span>` : ''}</div>` : '<div class="fi">Fiyat bekleniyor</div>') : ''}
-      ${karar && teklifIdx.has(i) ? `<div class="karar" data-sid="${s.id}" data-i="${i}">
+      ${karar && teklifIdx.has(i) ? `<div class="karar" data-sid="${esc(s.id)}" data-i="${i}">
           <button class="ok ${kt[i] === 'onaylandi' ? 'on' : ''}" data-k="onaylandi">✓ Onayla</button>
           <button class="no ${kt[i] === 'cikarildi' ? 'on' : ''}" data-k="cikarildi">✕ Çıkar</button></div>` : ''}
       ${!karar && s.kararlar?.[i] === 'cikarildi' ? '<div class="muted">Çıkarıldı</div>' : ''}
@@ -226,7 +226,7 @@ function siparisKarti(s) {
   const onayliToplam = [...teklifIdx].filter(i => (karar ? kt[i] : s.kararlar?.[i]) === 'onaylandi').reduce((a, i) => a + (s.teklif?.[i]?.fiyat || 0), 0);
   const tamam = karar && kararlarTamam(s, kt);
   const ilerleme = hazirlikVar && hazir.size ? Math.round([...hazir].filter(i => h[i]).length / hazir.size * 100) : null;
-  return `<div class="card" id="k_${s.id}">
+  return `<div class="card" id="k_${esc(s.id)}">
     <div class="row"><span class="muted">${tarihSaat(s.olusturma)}</span>${durumEtiketi(s.durum, DURUM_ADI[s.durum])}</div>
     ${karar ? '<div class="uyari" style="margin:10px 0 0">Fiyatlar geldi. Her kalem için onaylayın ya da çıkarın, sonra gönderin.</div>' : ''}
     <div style="margin-top:6px">${kalemler}</div>
@@ -234,8 +234,8 @@ function siparisKarti(s) {
     ${ilerleme !== null && s.durum !== 'teslim_edildi' ? `<div class="ilerleme"><i style="width:${ilerleme}%"></i></div><div class="muted" style="margin-top:4px">Hazırlık %${ilerleme}</div>` : ''}
     ${teklifIdx.size && onayliToplam ? `<div class="row" style="margin-top:8px"><span class="muted">Onaylanan teklif toplamı</span><span class="money">${TL(onayliToplam)}</span></div>` : ''}
     <div class="btns">
-      ${karar ? `<button class="btn" data-gonder="${s.id}" ${tamam ? '' : 'disabled'}>Kararımı gönder</button>` : ''}
-      ${musteriIptalEdebilir(s) ? `<button class="btn ghost kucuk" data-iptal="${s.id}">Siparişi iptal et</button>` : ''}
+      ${karar ? `<button class="btn" data-gonder="${esc(s.id)}" ${tamam ? '' : 'disabled'}>Kararımı gönder</button>` : ''}
+      ${musteriIptalEdebilir(s) ? `<button class="btn ghost kucuk" data-iptal="${esc(s.id)}">Siparişi iptal et</button>` : ''}
     </div></div>`;
 }
 
